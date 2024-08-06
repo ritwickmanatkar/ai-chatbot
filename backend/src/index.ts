@@ -9,6 +9,6 @@ connectToDatabase().then(() => {
   console.log('Database is connected...');
   // For my Macbook port 5000 was in use due to Airplay settings being turned on. 
   // I turned it off to make this work.
-  app.listen(5000, () => console.log("Server is now open..."));
+  app.listen(PORT, () => console.log("Server is now open..."));
 })
 .catch((err) => console.log(err));
