@@ -7,9 +7,11 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Chat from './pages/Chat';
 import NotFound from './pages/NotFound';
+import { useAuth } from './context/AuthContext';
 
 // Application
 function App() {
+  console.log(useAuth()?.isLoggedIn);
   return (
     <main>
       <Header />
