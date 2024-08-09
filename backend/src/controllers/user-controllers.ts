@@ -55,7 +55,7 @@ const userSignup = async (request: Request, response: Response, next: NextFuncti
         });
 
         // Returning the status code and the user id.
-        return response.status(200).json({message: "OK", id: new_user._id.toString()});
+        return response.status(200).json({message: "OK", name: new_user.name, email: new_user.email});
     } catch (error) {
         console.log(error);
         return response.status(500).json({message: "Internal Server Error", cause: error.message});
@@ -98,7 +98,7 @@ const userLogin = async (request: Request, response: Response, next: NextFunctio
         });
 
         // Successfully logged in.
-        return response.status(200).json({message: "OK", id: user._id.toString()});
+        return response.status(200).json({message: "OK", name: user.name, email: user.email});
     } catch (error) {
         console.log(error);
         return response.status(500).json({message: "Internal Server Error", cause: error.message});

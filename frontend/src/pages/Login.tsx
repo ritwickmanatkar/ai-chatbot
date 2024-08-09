@@ -2,15 +2,29 @@ import { Box, Button, Typography } from '@mui/material';
 import React from 'react'
 import CustomizedInput from '../components/shared/CustomizedInput';
 import { IoIosLogIn } from 'react-icons/io';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
+// This function handles the 'onClick' of the submit button. The information is extracted for later use in the backend. 
 const Login = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const auth = useAuth();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     
-    console.log(email, password)
+    // console.log(email, password)
+
+    try {
+      toast.loading("Signing In ", {id: 'login'});
+      await auth?.login(email, password);
+      toast.success("Signed In Successfully", {id: 'login'});
+    } catch (error) {
+      console.log(error);
+      toast.error("Sign in Fail", {id: 'login'});
+    }
   };
 
   return (

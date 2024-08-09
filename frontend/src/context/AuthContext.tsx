@@ -1,5 +1,6 @@
 // Imports
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { loginUser } from "../helpers/api-communicators";
 
 // Define types for Information Management
 type User = {
@@ -29,7 +30,15 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
         // Add code to skip login if user's cookies are valid. 
     }, []);
 
-    const login = async (email: string, password: string) => {};
+    // Login Function
+    const login = async (email: string, password: string) => {
+        // On login the data needs to extracted from frontend and set in the auth information.
+        const data = await loginUser(email, password);
+        if (data) {
+            setUser({ email: data.email, name: data.name });
+            setIsLoggedIn(true);
+        };
+    };
     const signup = async (name: string, email: string, password: string) => {};
     const logout = async () => {};
 
