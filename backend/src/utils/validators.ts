@@ -15,6 +15,7 @@ export const validate = (validations: ValidationChain[]) => {
     };
 };
 
+// User Management Validations
 export const loginValidator = [
     body('email').trim().isEmail().withMessage("Email is a required field."),
     body('password').trim().isLength({min:6}).withMessage("Password should contain atleast 6 characters.")
@@ -23,4 +24,9 @@ export const loginValidator = [
 export const signupValidator = [
     body('name').notEmpty().withMessage("Name is a required field."),
     ...loginValidator
+]
+
+// Chat Management Validations
+export const chatCompletionValidator = [
+    body('message').notEmpty().withMessage("Message is required.")
 ]
