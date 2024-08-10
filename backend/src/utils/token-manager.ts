@@ -1,5 +1,7 @@
 // Imports
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { COOKIE_NAME } from './constants.js';
 
 // Token Manager functionality
 const createToken = (id: string, email: string, expiresIn: string) => {
@@ -9,6 +11,27 @@ const createToken = (id: string, email: string, expiresIn: string) => {
     return token;
 };
 
+const verifyToken = async (request: Request, response: Response, next: NextFunction) => {
+    const token = request.signedCookies[COOKIE_NAME];
+
+    if (!token || token.trim() === "") {
+        return response.status(401).json({message: "Token not received..."});
+    };
+
+    return new Promise<void>((resolve, reject) => {
+        return jwt.verify(token, process.env.JWT_SECRET, (error, success) => {
+            if (error) {
+                reject(error.message);
+                return response.status(401).json({message: "Token Expired/Invalid"});
+            } else {
+                resolve();
+                response.locals.jwtData = success ;
+                return next();
+            }
+        });
+    }); 
+};
+
 
 // Export the functions
-export { createToken }
+export { createToken, verifyToken }

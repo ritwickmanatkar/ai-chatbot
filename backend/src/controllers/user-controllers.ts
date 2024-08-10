@@ -105,4 +105,24 @@ const userLogin = async (request: Request, response: Response, next: NextFunctio
     }
 };
 
-export {getAllUsers, userSignup, userLogin};
+const verifyUser = async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        // Extract and check if User exists.
+        const user = await User.findById(response.locals.jwtData.id);
+        if (!user) return response.status(401).send("User not found OR Token is INVALID");
+
+        // Confirm that the Token ID is same as User ID
+        if (user._id.toString() !== response.locals.jwtData.id) {
+            return response.status(401).send("Permissions did not match!");
+        }
+
+        // Successfully logged in.
+        return response.status(200).json({message: "OK", name: user.name, email: user.email});
+    } catch (error) {
+        console.log(error);
+        return response.status(500).json({message: "Internal Server Error", cause: error.message});
+    }
+};
+
+
+export {getAllUsers, userSignup, userLogin, verifyUser};

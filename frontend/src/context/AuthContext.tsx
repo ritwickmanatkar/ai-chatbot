@@ -1,6 +1,6 @@
 // Imports
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { loginUser } from "../helpers/api-communicators";
+import { checkAuthStatus, loginUser } from "../helpers/api-communicators";
 
 // Define types for Information Management
 type User = {
@@ -28,6 +28,14 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     // TODO: Complete after login page is complete. 
     useEffect(() => {
         // Add code to skip login if user's cookies are valid. 
+        async function checkStatus() {
+            const data = await checkAuthStatus();
+            if (data) {
+                setUser({ email: data.email, name: data.name });
+                setIsLoggedIn(true);
+            };
+        }
+        checkStatus();
     }, []);
 
     // Login Function
